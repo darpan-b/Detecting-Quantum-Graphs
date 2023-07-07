@@ -18,7 +18,7 @@ Plese check [Sample Testcases](/sample_testcases.txt) to gain a better understan
 
 To run the program, please use **Python3**.
 The command to run the program is:
-`python "algo1_and_type_k.py"`.
+`python "detecting_quantum_graphs.py"`.
 
 Feel free to report any bugs / issues found.
 
