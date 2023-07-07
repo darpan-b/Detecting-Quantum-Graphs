@@ -19,6 +19,5 @@ The command to run the program is:
 
 For reporting any bugs / issues, reader can mail them to [dbhattacharya170803@gmail.com](mailto:dbhattacharya170803@gmail.com).
 
+### References
 [CG 22] L. S. Chandran and R. Gajjala. Perfect matchings and quantum physics: Progress on Krenn’s Conjecture, 2022.
-
--- Darpan
