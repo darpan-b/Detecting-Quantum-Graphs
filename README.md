@@ -17,6 +17,6 @@ To run the program, please use **Python3**.
 The command to run the program is:
 `python "detecting_quantum_graphs.py"`.
 
-For reporting any bugs / issues, reader can mail them to [mailto:dbhattacharya170803@gmail.com](dbhattacharya170803@gmail.com).
+For reporting any bugs / issues, reader can mail them to [dbhattacharya170803@gmail.com](mailto:dbhattacharya170803@gmail.com).
 
 -- Darpan
