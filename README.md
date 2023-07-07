@@ -1,7 +1,6 @@
 # Detecting-Quantum-Graphs
 
-Given a _connected, undirected, non-trivial, matching-covered, non-isomorphic to K4_ graph G=(V, E), this program finds whether
-### **G is a Type-2 graph** or not. 
+Given a _connected, undirected, non-trivial, matching-covered, non-isomorphic to K4_ graph G=(V, E), this program finds whether <font size="+1"> **G is a Type-2 graph** or not. </font>
 
 To achieve the above stated goal, it does the following:
 - Finds a matching covered graph G'=(V, E') in G. If G is already matching-covered, then G'=G.
