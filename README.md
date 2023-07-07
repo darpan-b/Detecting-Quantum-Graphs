@@ -1,14 +1,8 @@
 # Detecting-Quantum-Graphs
 
-Given a _connected, undirected, non-trivial, matching-covered, non-isomorphic to K4_ graph G=(V, E), this program finds whether 
-### **G is a Type-2 graph** or not.
+We give a program to rule out the counter examples for the [Krenn-Gu conjecture](https://mariokrenn.wordpress.com/graph-theory-question/).
 
-To achieve the above stated goal, it does the following:
-- Finds a matching covered graph G'=(V, E') in G. If G is already matching-covered, then G'=G.
-- Checks whether G' is a connected or not. If G' is connected, it checks whether G' is a 2-connected or 3-connected graph.
-- Checks whether G' is a Type-2 graph or not.
-
-To check whether G' is a Type-2 graph or not, it rougly follows **Algorithm 1** in [Perfect Matchings and Quantum Physics: Progress on Krenn's Conjencture by L. Sunil Chandran and Rishikesh Gajjala](/2202.05562.pdf).
+From prior work, it is known that counter example cannot be a Type-2 graph [CG 22](/2022.05562.pdf). We roughly implement the Type-2 graph detection algorithm from [CG 22](/2022.05562.pdf) to detect such graphs. We also detect 2-connected graphs, which can not be a counter example and 3-connected graphs which can not be a minimal counter example. 
 
 The graph G is provided input to the program in the following format:
 ```
