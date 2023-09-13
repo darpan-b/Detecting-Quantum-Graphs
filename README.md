@@ -21,3 +21,7 @@ For any queries or for reporting any bugs / issues, reader can mail at [dbhattac
 
 ### References
 [CG 22] L. S. Chandran and R. Gajjala. Perfect matchings and quantum physics: Progress on Krenn’s Conjecture, 2022.
+
+## Update (13.09.2023):
+Commented and slightly restructured [/detecting_quantum_graphs.py](/detecting_quantum_graphs.py) to make it more readable. Added a function 'chandran_gajjala_is_type2(G, degrees, |V|)' which returns True if G is Type 2, otherwise returns False. Additionally, if G is not Type 2, the potential cause for it is now stated in the output.
+[Sample Testcases](/sample_testcases.txt) updated accordingly.
