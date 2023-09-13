@@ -36,15 +36,14 @@ Is 3-connected: No
 Re-numbering of vertices:
 =================================================
 Original numbering: 1 Re-numbering: 0
-Original numbering: 2 Re-numbering: 3
-Original numbering: 3 Re-numbering: 1
+Original numbering: 2 Re-numbering: 1
+Original numbering: 3 Re-numbering: 3
 Original numbering: 4 Re-numbering: 2
 =================================================
 
 ===========================================
 Is type 2: Yes
 ===========================================
-
 
 Case 2:
 
@@ -76,7 +75,7 @@ Edges in the matching covered graph are:
 
 ---------------------------------------------------------
 Is 2-connected: Yes
-Is 3-connected: No
+Is 3-connected: Yes
 ---------------------------------------------------------
 
 
@@ -84,11 +83,11 @@ Is 3-connected: No
 Re-numbering of vertices:
 =================================================
 Original numbering: 1 Re-numbering: 0
-Original numbering: 2 Re-numbering: 4
+Original numbering: 2 Re-numbering: 2
 Original numbering: 3 Re-numbering: 3
-Original numbering: 4 Re-numbering: 5
-Original numbering: 5 Re-numbering: 1
-Original numbering: 6 Re-numbering: 2
+Original numbering: 4 Re-numbering: 1
+Original numbering: 5 Re-numbering: 5
+Original numbering: 6 Re-numbering: 4
 =================================================
 
 ===========================================
@@ -399,6 +398,7 @@ Is 3-connected: Yes
 ---------------------------------------------------------
 
 
+NOT TYPE 2 BECAUSE NO HAMILTONIAN CYCLES WERE FOUND
 ===========================================
 Is type 2: No
 ===========================================
@@ -498,7 +498,7 @@ Edges in the matching covered graph are:
 
 ---------------------------------------------------------
 Is 2-connected: Yes
-Is 3-connected: No
+Is 3-connected: Yes
 ---------------------------------------------------------
 
 
@@ -515,6 +515,7 @@ Original numbering: 7 Re-numbering: 6
 Original numbering: 8 Re-numbering: 7
 =================================================
 
+NOT TYPE 2 BECAUSE ILLEGAL EDGE WAS FOUND
 ===========================================
 Is type 2: No
 ===========================================
@@ -631,4 +632,3 @@ Original numbering: 10 Re-numbering: 1
 ===========================================
 Is type 2: Yes
 ===========================================
-
