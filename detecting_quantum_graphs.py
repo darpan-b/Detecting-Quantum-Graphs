@@ -1,9 +1,8 @@
 from max_matching import Node, Match
-import random
 import convert_g_to_mcg
 import check_if_connected
 
-
+''' Just an utility function for checking connectivity'''
 def dfs(adjacency_list, visited, curnode, avoid1, avoid2, avoid3):
     if curnode == avoid1 or curnode == avoid2 or curnode == avoid3: return
     visited[curnode] += 1
@@ -13,7 +12,8 @@ def dfs(adjacency_list, visited, curnode, avoid1, avoid2, avoid3):
         dfs(adjacency_list, visited, e, avoid1, avoid2, avoid3)
 
 
-def check_connected(adjacency_list, nv):
+''' Returns True if the graph is 2-edge-connected, otherwise returns False'''
+def check_if_2_connected(adjacency_list, nv):
     # checking for 2-connectivity
     for i in range(nv):
         for j in range(i+1, nv):
@@ -23,8 +23,11 @@ def check_connected(adjacency_list, nv):
             dfs(adjacency_list, visited, tdfs, i, j, -1)
             for k in range(nv):
                 if k == i or k == j: continue
-                if visited[k] == 0: return 2
+                if visited[k] == 0: return True
+    return False
 
+''' Returns True if the graph is 3-edge-connected, otherwise returns False'''
+def check_if_3_connected(adjacency_list, nv):
     # checking for 3-connectivity
     for i in range(nv):
         for j in range(i+1, nv):
@@ -35,19 +38,44 @@ def check_connected(adjacency_list, nv):
                 dfs(adjacency_list, visited, tdfs, i, j, k)
                 for l in range(nv):
                     if l == i or l == j or l == k: continue
-                    if visited[l] == 0: return 3
+                    if visited[l] == 0: return True
+    return False
 
-    return -1
 
 
+
+
+''' The following function takes in the adjacency list of a graph G,
+    an array containing the degree of each vertex in the graph,
+    and the total number of vertices in the graph.
+
+    It returns k, where k is the ** matching index of G (denoted by $\mu$) **.
+    If $\mu(G) = 2$, then G is said to be a TYPE 2 graph.
+
+    If $\mu(G) \ne 2$, then the function states the reason why it is not a TYPE 2 graph. 
+'''
 def find_mu(adjacency_list, degrees, nv):
-    v = random.randint(0, nv-1)
+    v = 0 # Selecting an arbitrary vertex
 
-    if max(degrees) >= 5: return 1
+    if max(degrees) >= 5: return 1 # From Observation 3.9
+
+    ''' In the algorithm, it states that for all pairs of edges {e_1, e_2} incident on v,
+        pick arbitrary perfect matchings M_1, M_2 such that e_1 \in M_1 and e_2 \in M_2,
+        and if M_1 U M_2 is a hamiltonian cycle, then add it to the list of hamiltonian
+        cycles.
+
+        In the implementation however, for simplification (and optimization) purposes
+        we pick an arbitrary perfect matching M_i for any edge e_i adjacent to v. Now,
+        we check if there exists any such M_i, M_j (i \ne j) such that M_i U M_j is a
+        hamiltonian cycle. If we find such M_i and M_j, we stop looking for any other
+        hamiltonian cycles (because later on we anyway utilize only a single hamiltonian
+        cycle to check the satisfiability of Properties 1, 2 and 3) and then move on to 
+        checking whether the hamiltonian cycle satisfies Properties 1, 2 and 3.
+    '''
 
     all_matchings = []
     for u in adjacency_list[v]:
-        nodes = [Node() for i in range(nv-2)]
+        nodes = [Node() for i in range(nv - 2)]
         prev_value = [i for i in range(nv)]
         imap = {}
         tval = 0
@@ -72,11 +100,12 @@ def find_mu(adjacency_list, degrees, nv):
                 if e > v: neighnode -= 1
                 nodes[curnode].neighbors.append(nodes[neighnode])
         
-        match = Match(nodes)
+        match = Match(nodes) # This contains the maximum matching of the graph G, EXCLUDING THE VERTICES u and v
+                             # In this way, we can obtain the maximum matching of G such that it contains the edge (u, v)
         un = match.unmatched_nodes()
 
         already_present = set()
-        current_matching = [[min(u,v),max(u,v)]]
+        current_matching = [[min(u,v), max(u,v)]] # supposed to contain the matching of the max graph containing the edge (u, v)
         for node in nodes:
             if node.mate != None:
                 assert node.mate.mate == node
@@ -90,7 +119,8 @@ def find_mu(adjacency_list, degrees, nv):
                 already_present.add(prev_value[num1])
                 already_present.add(prev_value[num2])
 
-        all_matchings.append(current_matching)
+        all_matchings.append(current_matching) # add the current matching to the list of all matchings
+
 
     tot_matchings = len(all_matchings)
 
@@ -101,6 +131,9 @@ def find_mu(adjacency_list, degrees, nv):
         if hamiltonian_cycle: break
         for j in range(i+1, tot_matchings):
             m1, m2 = all_matchings[i], all_matchings[j]
+
+            # check if m1 U m2 form a hamiltonian cycle
+
             assert(len(m1) == len(m2) and len(m1) == nv//2)
             is_hamiltonian = True
 
@@ -110,7 +143,7 @@ def find_mu(adjacency_list, degrees, nv):
                     break
             if not is_hamiltonian: continue
 
-            ''' checking whether it is only 1 hamiltonian cycle or multiple hamiltonian cycles'''
+            # checking whether it is only 1 hamiltonian cycle or multiple hamiltonian cycles
             all_here = []
             for e in m1: all_here.append(e)
             for e in m2: all_here.append(e)
@@ -133,8 +166,11 @@ def find_mu(adjacency_list, degrees, nv):
             break
     
     if not hamiltonian_cycle:
+        print('NOT TYPE 2 BECAUSE NO HAMILTONIAN CYCLES WERE FOUND')
         return 1
     
+
+    # Re-numbering the vertices in the order that they are present in the hamiltonian cycle for convenience
     re_numbering = [-1 for i in range(nv)]
     re_numbering[0] = 0
     current_number = 1
@@ -146,6 +182,9 @@ def find_mu(adjacency_list, degrees, nv):
             current_vertex = w2[current_vertex]
         else:
             current_vertex = w1[current_vertex]
+
+
+
     print('=================================================')
     print('Re-numbering of vertices:')
     print('=================================================')
@@ -165,7 +204,9 @@ def find_mu(adjacency_list, degrees, nv):
                     found = True
                     break
             if not found:
-                if re_numbering[u]%2 != re_numbering[i]%2: return 1
+                if re_numbering[u]%2 != re_numbering[i]%2:
+                    print('NOT TYPE 2 BECAUSE ILLEGAL EDGE WAS FOUND')
+                    return 1
 
     '''checking property 2'''
     n_es = len(edge_set)
@@ -179,13 +220,17 @@ def find_mu(adjacency_list, degrees, nv):
             drum_no[i] = -2
             continue
         for j in range(i+1, n_es):
-            if edge_set[i][0] == edge_set[j][1] and edge_set[i][1] == edge_set[j][0]: continue
+            if edge_set[i][0] == edge_set[j][1] and edge_set[i][1] == edge_set[j][0]:
+                continue
             e1, e2 = edge_set[i], edge_set[j]
             if e2 in hamiltonian_cycle: continue
             if [edge_set[j][1],edge_set[j][0]] in hamiltonian_cycle: continue
 
 
             v1, v2, v3, v4 = re_numbering[e1[0]], re_numbering[e1[1]], re_numbering[e2[0]], re_numbering[e2[1]]
+
+            # check if the edges e1 and e2, which, if legal and non-cyclic edges, form a valid drum or not
+
             lv = [v1, v2, v3, v4]
             lv.sort()
             if not((lv[0] == v1 and lv[2] == v2) or (lv[0] == v2 and lv[2] == v1) or (lv[1] == v1 and lv[3] == v2) or (lv[1] == v2 and lv[3] == v1)):
@@ -198,10 +243,13 @@ def find_mu(adjacency_list, degrees, nv):
                 if lv[k]%2 != lv[k-2]%2:
                     is_drum = False
                     break
-            if not is_drum or dec != 1: return 1
+            if not is_drum or dec != 1:
+                print('NOT TYPE 2 BECAUSE CROSSING PAIR DOES NOT FORM A DRUM')
+                return 1
             def is_adj_vertex(x,y): return abs(x-y) == 1 or abs(x-y) == nv-1
             if (is_adj_vertex(lv[0],lv[1]) and is_adj_vertex(lv[2],lv[3])) or (is_adj_vertex(lv[0],lv[3]) and is_adj_vertex(lv[1],lv[2])):
                 if drum_no[i] != -1 or drum_no[j] != -1:
+                    print('NOT TYPE 2 BECAUSE LEGAL EDGE IS PART OF MULTIPLE CROSSING PAIRS')
                     return 1
                 drums += 1
                 drum_no[i], drum_no[j] = drums, drums
@@ -209,15 +257,25 @@ def find_mu(adjacency_list, degrees, nv):
                 return 1
 
     '''checking property 3'''
-    if -1 in drum_no: return 1
+    if -1 in drum_no:
+        print('NOT TYPE 2 BECAUSE LEGAL EDGE IS NOT PART OF ANY DRUMS')
+        return 1
     if max(drum_no) == -2 and min(drum_no) == -2: return 2
     d_count = [0 for i in range(drums)]
     for i in range(n_es):
-        if drum_no[i] == -1: return 1
+        if drum_no[i] == -1:
+            print('NOT TYPE 2 BECAUSE LEGAL EDGE IS NOT PART OF ANY DRUMS')            
+            return 1
         if drum_no[i] == -2: continue
         d_count[drum_no[i]-1] += 1
     if max(d_count) == 2 and min(d_count) == 2: return 2
     else: return 1
+
+
+''' returns True if G is Type 2, otherwise returns False '''
+def chandran_gajjala_is_type2(adjacency_list, degrees, nv):
+    return find_mu(adjacency_list, degrees, nv) == 2
+
 
 def main():
     nv, ne = 0, 0
@@ -239,18 +297,23 @@ def main():
         degree[v] += 1
         capacity[u][v] = 1
         capacity[v][u] = 1
-    is_graph_connected=check_if_connected.check_connected(adj_list, nv)
+    is_graph_connected = check_if_connected.check_connected(adj_list, nv)
     if not is_graph_connected:
         print('Graph is not connected')
         exit(0)
-    adj_list=convert_g_to_mcg.convert_to_mcg(adj_list, nv)
-    is_graph_connected=check_if_connected.check_connected(adj_list, nv)
+
+    # If the graph is not a matching-covered graph, convert it to a matching covered graph
+    adj_list = convert_g_to_mcg.convert_to_mcg(adj_list, nv)
+
+    # Check if the resulting matching-covered graph is connected or not
+    is_graph_connected = check_if_connected.check_connected(adj_list, nv)
+    
+    
     if not is_graph_connected:
         print('Matching covered graph is not connected')
         exit(0)
-    connectivity = check_connected(adj_list, nv)
-    is_2_connected = (connectivity == 2)
-    is_3_connected = (connectivity == 3)
+    is_2_connected = check_if_2_connected(adj_list, nv)
+    is_3_connected = check_if_3_connected(adj_list, nv)
 
 
     print('---------------------------------------------------------')
@@ -259,7 +322,11 @@ def main():
     print('---------------------------------------------------------')
     print('')
     print('')
-    is_type2 = (find_mu(adj_list, degree, nv) == 2)
+
+
+    is_type2 = chandran_gajjala_is_type2(adj_list, degree, nv) # Is it a type-2 graph or not
+    
+    
     print('===========================================')
     print('Is type 2:', 'Yes' if is_type2 else 'No')
     print('===========================================')
